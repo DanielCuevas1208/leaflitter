@@ -1,0 +1,27 @@
+# Build output
+build/
+build-*/
+out/
+cmake-build-*/
+
+# Compiled objects and libraries
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+
+# Editor and OS noise
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+Testing/
