@@ -54,4 +54,11 @@ LF_INLINE int lf_breader_finished(lf_breader *r)
 
 LF_EXPORT size_t lf_breader_bytes_read(lf_breader *r);
 
+/* Drops any partial byte still buffered. Call only at a byte boundary. */
+LF_EXPORT void lf_breader_align(lf_breader *r);
+
+/* Copies `n` whole bytes into `dst`. Returns 1 on success, 0 on truncation.
+   Call only at a byte boundary. */
+LF_EXPORT int lf_breader_read_bytes(lf_breader *r, uint8_t *dst, size_t n);
+
 #endif /* LF_BITIO_H */

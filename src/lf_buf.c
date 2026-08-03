@@ -76,6 +76,15 @@ void lf_buf_clear(lf_buf *b)
     b->len = 0;
 }
 
+lf_result lf_buf_put_u16le(lf_buf *b, uint16_t v)
+{
+    uint8_t t[2];
+
+    t[0] = (uint8_t)(v & 0xFFu);
+    t[1] = (uint8_t)((v >> 8u) & 0xFFu);
+    return lf_buf_append(b, t, sizeof(t));
+}
+
 lf_result lf_buf_put_u32le(lf_buf *b, uint32_t v)
 {
     uint8_t t[4];

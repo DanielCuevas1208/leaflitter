@@ -3,6 +3,8 @@ build/
 build-*/
 out/
 cmake-build-*/
+install*/
+CMakeUserPresets.json
 
 # Compiled objects and libraries
 *.o

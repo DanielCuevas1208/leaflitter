@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-gcc
+            os: ubuntu-latest
+            compiler: gcc
+            flags: ""
+          - name: linux-clang
+            os: ubuntu-latest
+            compiler: clang
+            flags: ""
+          - name: macos-clang
+            os: macos-latest
+            compiler: clang
+            flags: ""
+          - name: windows-msvc
+            os: windows-latest
+            compiler: ""
+            flags: ""
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: |
+          if [ "${{ matrix.compiler }}" != "" ]; then
+            export CC=${{ matrix.compiler }}
+          fi
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DLEAFLITTER_WERROR=ON ${{ matrix.flags }}
+        shell: bash
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Install
+        run: |
+          cmake --install build --config Release --prefix install-dir
+          test -f install-dir/include/lf_stream.h
+          test -f install-dir/lib/libleaflitter.a -o -f install-dir/lib/leaflitter.lib
+        shell: bash
+
+  sanitize:
+    name: sanitize
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: >
+          cmake -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=clang
+          -DLEAFLITTER_WERROR=ON
+          -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+        env:
+          ASAN_OPTIONS: detect_leaks=1
