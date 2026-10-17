@@ -29,7 +29,7 @@ lf_result lf_bwriter_put(lf_bwriter *w, uint32_t value, unsigned nbits)
             return r;
         }
         w->nbits -= 8u;
-        w->acc &= 0x7Fu;
+        w->acc &= ((uint64_t)1 << w->nbits) - 1u;
     }
     return LF_OK;
 }
@@ -93,4 +93,27 @@ uint32_t lf_breader_get(lf_breader *r, unsigned nbits)
 size_t lf_breader_bytes_read(lf_breader *r)
 {
     return r->pos;
+}
+
+void lf_breader_align(lf_breader *r)
+{
+    r->nbits = 0;
+    r->acc = 0;
+}
+
+int lf_breader_read_bytes(lf_breader *r, uint8_t *dst, size_t n)
+{
+    if (r->nbits != 0) {
+        r->valid = 0;
+        return 0;
+    }
+    if (r->pos > r->len || n > r->len - r->pos) {
+        r->valid = 0;
+        return 0;
+    }
+    if (n > 0) {
+        memcpy(dst, r->data + r->pos, n);
+        r->pos += n;
+    }
+    return 1;
 }

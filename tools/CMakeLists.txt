@@ -1,0 +1,3 @@
+add_executable(leaflitter_cli leaflitter.c)
+target_link_libraries(leaflitter_cli PRIVATE leaflitter::leaflitter)
+set_target_properties(leaflitter_cli PROPERTIES OUTPUT_NAME leaflitter)

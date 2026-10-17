@@ -13,7 +13,7 @@
 #endif
 
 #define LF_VERSION_MAJOR 1
-#define LF_VERSION_MINOR 0
+#define LF_VERSION_MINOR 1
 #define LF_VERSION_PATCH 0
 
 #define LF_MAGIC_0 0x4Cu /* 'L' */
@@ -37,7 +37,7 @@
 
 #define LF_MAX_CODE_LEN 15u
 
-/* Position 0 means "no previous position with this hash". */
+/* Chain positions are stored one-based. 0 means "no previous position". */
 #define LF_LZ_NONE 0u
 
 typedef enum lf_result {

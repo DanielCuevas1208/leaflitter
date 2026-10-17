@@ -21,6 +21,8 @@ LF_EXPORT lf_result lf_buf_append_u8(lf_buf *b, uint8_t v);
 
 LF_EXPORT void lf_buf_clear(lf_buf *b);
 
+LF_EXPORT lf_result lf_buf_put_u16le(lf_buf *b, uint16_t v);
+
 LF_EXPORT lf_result lf_buf_put_u32le(lf_buf *b, uint32_t v);
 
 LF_EXPORT lf_result lf_buf_put_u64le(lf_buf *b, uint64_t v);
